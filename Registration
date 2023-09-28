@@ -1,0 +1,111 @@
+   #include <iostream>
+   #include <fstream> 
+   #include <string>
+   #include <vector> 
+   struct Student
+   {
+    std::string username;
+     std::string password;
+      std::string name;
+       int age; 
+       std::string course; 
+   };
+    void registerStudent()
+   {
+    std::ofstream ofs("students.txt", std::ios::app); // Open the file in append mode
+    std::string username, password, name, course;
+     int age; 
+     std::cout << "Username: "; 
+     std::cin >> username; 
+     
+     std::cout << "Password: ";
+     std::cin >> password;
+     
+     std::cout << "Name: "; 
+     std::cin.ignore(); // Ignore the newline character left by previous input 
+     std::getline(std::cin, name);
+    
+     std::cout << "Age: "; 
+     std::cin >> age; 
+     
+     std::cout << "Course: ";
+     std::cin.ignore(); 
+     std::getline(std::cin, course); 
+     
+     // Create a new student object 
+     Student student; 
+     student.username = username; 
+     student.password = password; 
+     student.name = name; 
+     student.age = age; 
+     student.course = course;
+    
+     // Write the student data to the file 
+     ofs << student.username << " " << student.password << " " 
+         << student.name << " " << student.age << " " << student.course << std::endl; 
+    
+    
+     ofs.close(); 
+     
+     std::cout << "Registration successful!" << std::endl;
+  
+   } 
+  
+  
+   bool login() 
+   {
+    
+     std::string username, password; 
+     
+     std::cout << "Username: "; 
+     std::cin >> username; 
+     
+     std::cout << "Password: "; 
+     std::cin >> password; 
+     
+     std::ifstream ifs("students.txt"); 
+     std::string studentUsername, studentPassword, name, course; 
+     
+     int age; 
+     while (ifs >> studentUsername >> studentPassword >> name >> age >> course) 
+     { 
+      if (studentUsername == username && studentPassword == password) { 
+       std::cout << "Login successful!" << std::endl; 
+       std::cout << "Welcome, " << name << "!" << std::endl; 
+       std::cout << "Age: " << age << std::endl; 
+       std::cout << "Course: " << course << std::endl; 
+       return true; 
+      } 
+     } 
+     
+     std::cout << "Invalid username or password." << std::endl; 
+     return false; 
+   } 
+   
+   int main() 
+   {
+    int option; 
+    do 
+    {
+     std::cout << "1. Register\n2. Login\n3. Quit" << std::endl;
+     std::cout << "Enter option: "; 
+     std::cin >> option;
+    
+     switch (option)
+      { 
+       case 1: registerStudent(); 
+       break; 
+       
+       case 2: login(); 
+       break; 
+       
+       case 3: std::cout << "Exiting program." << std::endl; 
+       break; 
+       
+       default: std::cout << "Invalid option." << std::endl; 
+       break; 
+      } 
+ ⁹
+    }  while (option != 3);
+      return 0; 
+   }
