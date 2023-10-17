@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <string.h>
+
+// Structure to represent a bank account
+struct BankAccount {
+    char name[50];
+    int accountNumber;
+    double balance;
+};
+
+// Function to create a new account
+void createAccount(struct BankAccount accounts[], int* accountCount) {
+    if (*accountCount >= 10) {
+        printf("Cannot create more accounts. Limit reached.\n");
+        return;
+    }
+
+    struct BankAccount newAccount;
+    printf("Enter account holder's name: ");
+    scanf("%s", newAccount.name);
+    newAccount.accountNumber = *accountCount + 1;
+    newAccount.balance = 0;
+
+    accounts[*accountCount] = newAccount;
+    (*accountCount)++;
+    printf("Account created successfully.\n");
+}
+
+// Function to deposit money into an account
+void deposit(struct BankAccount accounts[], int accountCount, int accountNumber, double amount) {
+    if (accountNumber < 1 || accountNumber > accountCount) {
+        printf("Invalid account number.\n");
+        return;
+    }
+
+    accounts[accountNumber - 1].balance += amount;
+    printf("Deposit successful. New balance: %.2lf\n", accounts[accountNumber - 1].balance);
+}
+
+// Function to withdraw money from an account
+void withdraw(struct BankAccount accounts[], int accountCount, int accountNumber, double amount) {
+    if (accountNumber < 10 || accountNumber > accountCount) {
+        printf("Invalid account number.\n");
+        return;
+    }
+
+    if (amount > accounts[accountNumber - 1].balance) {
+        printf("Insufficient balance.\n");
+    } else {
+        accounts[accountNumber - 1].balance -= amount;
+        printf("Withdrawal successful. New balance: %.2lf\n", accounts[accountNumber - 1].balance);
+    }
+}
+
+// Function to check the balance of an account
+void checkBalance(struct BankAccount accounts[], int accountCount, int accountNumber) {
+    if (accountNumber < 1 || accountNumber > accountCount) {
+        printf("Invalid account number.\n");
+        return;
+    }
+
+    printf("Account Holder: %s\n", accounts[accountNumber - 1].name);
+    printf("Account Number: %d\n", accounts[accountNumber - 1].accountNumber);
+    printf("Account Balance: %.2lf\n", accounts[accountNumber - 1].balance);
+}
+
+int main() {
+    struct BankAccount accounts[10];
+    int accountCount = 0;
+
+    while (1) {
+        printf("\nBanking System Menu:\n");
+        printf("1. Create Account\n");
+        printf("2. Deposit\n");
+        printf("3. Withdraw\n");
+        printf("4. Check Balance\n");
+        printf("5. Exit\n");
+
+        int choice, accountNumber;
+        double amount;
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                createAccount(accounts, &accountCount);
+                break;
+            case 2:
+                printf("Enter account number: ");
+                scanf("%d", &accountNumber);
+                printf("Enter amount to deposit: ");
+                scanf("%lf", &amount);
+                deposit(accounts, accountCount, accountNumber, amount);
+                break;
+            case 3:
+                printf("Enter account number: ");
+                scanf("%d", &accountNumber);
+                printf("Enter amount to withdraw: ");
+                scanf("%lf", &amount);
+                withdraw(accounts, accountCount, accountNumber, amount);
+                break;
+            case 4:
+                printf("Enter account number: ");
+                scanf("%d", &accountNumber);
+                checkBalance(accounts, accountCount, accountNumber);
+                break;
+            case 5:
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
